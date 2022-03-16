@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="hello_world">Hello World!</string>
+    <string name="input_email_hint">Insert your email</string>
+    <string name="action_input">Take input</string>
+    <string name="title">Insert your email!</string>
+    <string name="email_not_valid_error">This has to be a valid email!</string>
+</resources>
