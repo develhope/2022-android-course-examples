@@ -1,0 +1,74 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    compileSdk 32
+
+    defaultConfig {
+        applicationId "com.example.gradleapplication"
+        minSdk 23
+        targetSdk 32
+        versionCode 5
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        release {
+            storeFile file('C:\\Users\\mrsasha\\AndroidStudioProjects\\GradleApplication\\release-key.jks')
+            storePassword '123456'
+            keyAlias 'app'
+            keyPassword '123456'
+        }
+    }
+
+    buildTypes {
+        debug {
+            resValue "string", "app_name", "[DEV] Gradle app"
+            resValue "string", "backend_endpoint", "https://dev-api.migreat.io/"
+            minifyEnabled false
+            applicationIdSuffix ".debug"
+        }
+        release {
+            resValue "string", "app_name", "Gradle app"
+            resValue "string", "backend_endpoint", "https://api.migreat.io/"
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            debuggable true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    //basic app dependencies
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    // Import the BoM for the Firebase platform
+    implementation platform('com.google.firebase:firebase-bom:30.1.0')
+
+    // Declare the dependencies for the Crashlytics and Analytics libraries
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.firebase:firebase-analytics'
+
+
+    testImplementation 'junit:junit:4.13.2'
+
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+}
