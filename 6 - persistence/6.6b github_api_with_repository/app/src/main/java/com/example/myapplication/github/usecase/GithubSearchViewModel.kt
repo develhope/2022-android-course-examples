@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.github.repository.GithubRepository
-import com.example.myapplication.github.repository.GithubRepositoryEvent
+import com.example.myapplication.github.repository.GithubResult
 import com.example.myapplication.github.usecase.model.GithubRepo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -59,12 +59,12 @@ class GithubSearchViewModel(
                 Log.d("GithubSearchViewModel", "received data: $it")
 
                 when (it) {
-                    is GithubRepositoryEvent.ReposLoaded -> result.emit(
+                    is GithubResult.ReposLoaded -> result.emit(
                         GithubSearchViewmodelState.GithubSearchResult(
                             it.repos
                         )
                     )
-                    is GithubRepositoryEvent.ReposLoadingError -> result.emit(
+                    is GithubResult.ReposLoadingError -> result.emit(
                         GithubSearchViewmodelState.GithubSearchError(it.message)
                     )
                 }

@@ -11,9 +11,9 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 
-sealed class GithubRepositoryEvent() {
-    data class ReposLoaded(val repos: List<GithubRepo>) : GithubRepositoryEvent()
-    data class ReposLoadingError(val message: String?) : GithubRepositoryEvent()
+sealed class GithubResult() {
+    data class ReposLoaded(val repos: List<GithubRepo>) : GithubResult()
+    data class ReposLoadingError(val message: String?) : GithubResult()
 }
 
 class GithubRepository(
@@ -21,13 +21,13 @@ class GithubRepository(
     private val repoDao: RepoDao
 ) {
 
-    private val result = MutableSharedFlow<GithubRepositoryEvent>()
+    private val result = MutableSharedFlow<GithubResult>()
 
     @Suppress("RedundantSuspendModifier")
-    suspend fun loadRepos(): Flow<GithubRepositoryEvent> {
+    suspend fun loadRepos(): Flow<GithubResult> {
         repoDao.getAll().map { list -> list.map { it.toModel() } }.collect {
             Log.d("GithubRepository", "retrieveRepos from database: $it")
-            result.emit(GithubRepositoryEvent.ReposLoaded(it))
+            result.emit(GithubResult.ReposLoaded(it))
         }
 
         return result
@@ -41,7 +41,7 @@ class GithubRepository(
             repoDao.insertAll(*dataFromNetwork.map { repo -> repo.toEntity() }.toTypedArray())
         } catch (error: Exception) {
             Log.w("GithubRepository", "error loading data from network: $error")
-            result.emit(GithubRepositoryEvent.ReposLoadingError(error.message))
+            result.emit(GithubResult.ReposLoadingError(error.message))
         }
     }
 }
